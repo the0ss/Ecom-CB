@@ -13,6 +13,8 @@ import com.ecommerce.ecom.dto.UpdateRequest;
 import com.ecommerce.ecom.service.ProductService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,18 +55,11 @@ public class ProductController {
     @PostMapping("/{pId}/apply-discount-tax")
     public ResponseEntity<Object> applyDiscountOrTax(
             @PathVariable Long pId,
-            @RequestParam(required = false) Double discountPercentage,
-            @RequestParam(required = false) Double taxRate
+            @RequestParam int discountOrTax,
+            @RequestParam @NotNull Double applicableValue
     ) {
-        if(discountPercentage == null && taxRate == null) {
-            return new ResponseEntity<>(ErrorResponse.builder().errorMessage("At least one of the parameters (discountPercentage or taxRate) should be provided").build(),HttpStatus.BAD_REQUEST);
-        }
-        else if(discountPercentage!=null&& taxRate!=null)
-            return new ResponseEntity<>(ErrorResponse.builder().errorMessage("Please choose either discount or tax, not both.").build(),HttpStatus.BAD_REQUEST);
-
-        else if (discountPercentage != null) {
-            return productService.applyDiscount(pId, discountPercentage);
-        }
-        return productService.applyTax(pId, taxRate);
+        if(discountOrTax==1)
+            return productService.applyTax(pId, applicableValue);
+        return productService.applyDiscount(pId, applicableValue);
     }
 }
