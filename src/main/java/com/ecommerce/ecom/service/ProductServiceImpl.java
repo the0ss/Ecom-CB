@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
                             .name(savedProduct.getName())
                             .description(savedProduct.getDescription())
                             .price(savedProduct.getPrice())
-                            .stock(savedProduct.getQuantityAvailable())
+                            .quantityAvailable(savedProduct.getQuantityAvailable())
                             .build(),HttpStatus.CREATED);
     }
 
@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
                     .name(product.getName())
                     .description(product.getDescription())
                     .price(product.getPrice())
-                    .stock(product.getQuantityAvailable())
+                    .quantityAvailable(product.getQuantityAvailable())
                     .build() , HttpStatus.OK);
     }
 
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
                                             .name(product.getName())
                                             .description(product.getDescription())
                                             .price(product.getPrice())
-                                            .stock(product.getQuantityAvailable())
+                                            .quantityAvailable(product.getQuantityAvailable())
                                             .build(), HttpStatus.OK);
     }
 
@@ -132,7 +132,7 @@ public class ProductServiceImpl implements ProductService {
                                             .name(product.getName())
                                             .description(product.getDescription())
                                             .price(product.getPrice())
-                                            .stock(product.getQuantityAvailable())
+                                            .quantityAvailable(product.getQuantityAvailable())
                                             .build(), HttpStatus.OK);
     }
     
