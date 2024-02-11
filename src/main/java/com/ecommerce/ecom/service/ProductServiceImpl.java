@@ -98,9 +98,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<Object> applyDiscount(Long pId, Double value) {
+        if (value < 0) {
+            return new ResponseEntity<>(ErrorResponse.builder().errorMessage("Discount value cannot be negative.")
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
         if(!productRepository.existsByProductId(pId))
-        return new ResponseEntity<> ( ErrorResponse.builder().errorMessage("The product doesn't exist.")
-                .build(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<> ( ErrorResponse.builder().errorMessage("The product doesn't exist.")
+                .build(),HttpStatus.NOT_FOUND);
 
         Product product = productRepository.findByProductId(pId);
         double discountedPrice = product.getPrice() - (product.getPrice() * (value / 100));
@@ -118,9 +122,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<Object> applyTax(Long pId, Double value) {
+        if (value < 0) {
+            return new ResponseEntity<>(ErrorResponse.builder().errorMessage("Tax value cannot be negative.")
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
         if(!productRepository.existsByProductId(pId))
-        return new ResponseEntity<> ( ErrorResponse.builder().errorMessage("The product doesn't exist.")
-                .build(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<> ( ErrorResponse.builder().errorMessage("The product doesn't exist.")
+                .build(),HttpStatus.NOT_FOUND);
 
         Product product = productRepository.findByProductId(pId);
         double discountedPrice = product.getPrice() + (product.getPrice() * (value / 100));

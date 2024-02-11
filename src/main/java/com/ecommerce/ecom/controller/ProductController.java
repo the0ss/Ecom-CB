@@ -13,7 +13,6 @@ import com.ecommerce.ecom.dto.UpdateRequest;
 import com.ecommerce.ecom.service.ProductService;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("product")
 public class ProductController {
     
     @Autowired
@@ -37,22 +36,22 @@ public class ProductController {
         return productService.createProduct(createRequest);
     }
 
-    @GetMapping("product/{pid}")
-    public ResponseEntity<Object> getProductDetails(@PathVariable("pid") Long pid) {
+    @GetMapping("{pid}")
+    public ResponseEntity<Object> getProduct(@PathVariable("pid") Long pid) {
         return productService.readProduct(pid);
     }
 
-    @PutMapping("product/{pid}")
-    public ResponseEntity<Object> putMethodName(@PathVariable("pid") long pid,@Valid @RequestBody UpdateRequest updateRequest) {
+    @PutMapping("{pid}")
+    public ResponseEntity<Object> putProduct(@PathVariable("pid") long pid,@Valid @RequestBody UpdateRequest updateRequest) {
         return productService.updateProduct(pid,updateRequest);
     }
     
-    @DeleteMapping("product/{pid}")
+    @DeleteMapping("{pid}")
     public ResponseEntity<Object>  deleteProduct(@PathVariable("pid") long pid){
         return productService.deleteProduct(pid);
     }
 
-    @PostMapping("/{pId}/apply-discount-tax")
+    @PostMapping("{pId}/apply-discount-tax")
     public ResponseEntity<Object> applyDiscountOrTax(
             @PathVariable Long pId,
             @RequestParam int discountOrTax,
@@ -60,6 +59,8 @@ public class ProductController {
     ) {
         if(discountOrTax==1)
             return productService.applyTax(pId, applicableValue);
-        return productService.applyDiscount(pId, applicableValue);
+        else if(discountOrTax ==2)
+            return productService.applyDiscount(pId, applicableValue);
+        return new ResponseEntity<>(ErrorResponse.builder().errorMessage("Please choose either discount or tax, not both.").build(),HttpStatus.BAD_REQUEST);
     }
 }
